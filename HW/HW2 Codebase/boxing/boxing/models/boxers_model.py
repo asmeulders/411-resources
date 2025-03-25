@@ -22,7 +22,6 @@ class Boxer:
     weight_class: str = None
 
     def __post_init__(self): # DO CHECKS?
-    #Docstring
     """Initializes the BoxingModel with a weight and automatically assign weight class
 
         """
@@ -30,7 +29,6 @@ class Boxer:
 
 
 def create_boxer(name: str, weight: int, height: int, reach: float, age: int) -> None: # DOCSTRINGS AND LOGGING
-    #Docstring 
     """Adds a boxer.
 
         Args:
@@ -88,7 +86,6 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
 
 
 def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
-    #Docstring
      """Removes a boxer by their boxer ID.
 
         Args:
@@ -116,8 +113,6 @@ def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
         raise e
 
 def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS AND LOGGING
-    #Docstring 
-    #double check 
     """Retrieves the leaderboard by the top ratios of wins over fights.
 
         Args:
@@ -176,7 +171,6 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS
 
 #may need to add logger.info to confirm success of method
 def get_boxer_by_id(boxer_id: int) -> Boxer: # DOCSTRINGS AND LOGGING
-    #Docstring 
     """Retrieves a boxer by their boxer ID.
 
         Args:
@@ -215,7 +209,6 @@ def get_boxer_by_id(boxer_id: int) -> Boxer: # DOCSTRINGS AND LOGGING
     
 
 def get_boxer_by_name(boxer_name: str) -> Boxer: # DOCSTRINGS AND LOGGING
-    #Docstring
     """Retrieves a boxer by its name.
 
         Args:
@@ -254,7 +247,6 @@ def get_boxer_by_name(boxer_name: str) -> Boxer: # DOCSTRINGS AND LOGGING
 
 
 def get_weight_class(weight: int) -> str: # DOCSTRINGS AND LOGGING
-    #Docstring 
     """Retrieves the weight class for a specific weight.
 
         Args:
@@ -284,7 +276,6 @@ def get_weight_class(weight: int) -> str: # DOCSTRINGS AND LOGGING
 
 
 def update_boxer_stats(boxer_id: int, result: str) -> None: # DOCSTRIGNS AND LOGGING
-    #Docstring
     """Updates a boxer's statistics.
 
         Args:
