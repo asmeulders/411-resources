@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)
 configure_logger(logger)
 
 
-class RingModel:
-    def __init__(self):
+class RingModel: # DOCSTRINGS
+    def __init__(self): # DOCSTRINGS
         self.ring: List[Boxer] = []
 
-    def fight(self) -> str:
+    def fight(self) -> str: # DOCSTRINGS AND LOGGING
         if len(self.ring) < 2:
             raise ValueError("There must be two boxers to start a fight.")
 
@@ -45,12 +45,12 @@ class RingModel:
 
         return winner.name
 
-    def clear_ring(self):
+    def clear_ring(self): # DOCSTRINGS AND LOGGING
         if not self.ring:
             return
         self.ring.clear()
 
-    def enter_ring(self, boxer: Boxer):
+    def enter_ring(self, boxer: Boxer): # DOCSTRINGS AND LOGGING
         if not isinstance(boxer, Boxer):
             raise TypeError(f"Invalid type: Expected 'Boxer', got '{type(boxer).__name__}'")
 
@@ -59,7 +59,7 @@ class RingModel:
 
         self.ring.append(boxer)
 
-    def get_boxers(self) -> List[Boxer]:
+    def get_boxers(self) -> List[Boxer]: # DOCSTRINGS AND LOGGING
         if not self.ring:
             pass
         else:
@@ -67,7 +67,7 @@ class RingModel:
 
         return self.ring
 
-    def get_fighting_skill(self, boxer: Boxer) -> float:
+    def get_fighting_skill(self, boxer: Boxer) -> float: # DOCSTRINGS AND LOGGING
         # Arbitrary calculations
         age_modifier = -1 if boxer.age < 25 else (-2 if boxer.age > 35 else 0)
         skill = (boxer.weight * len(boxer.name)) + (boxer.reach / 10) + age_modifier

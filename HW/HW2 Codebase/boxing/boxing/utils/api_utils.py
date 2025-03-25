@@ -13,7 +13,7 @@ RANDOM_ORG_URL = os.getenv("RANDOM_ORG_URL",
                            "https://www.random.org/decimal-fractions/?num=1&dec=2&col=1&format=plain&rnd=new")
 
 
-def get_random() -> float:
+def get_random() -> float: # DO DOCSTRINGS AND LOGGING
     try:
         response = requests.get(RANDOM_ORG_URL, timeout=5)
 

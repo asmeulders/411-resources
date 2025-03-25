@@ -14,7 +14,7 @@ configure_logger(logger)
 DB_PATH = os.getenv("DB_PATH", "/app/sql/boxing.db")
 
 
-def check_database_connection():
+def check_database_connection(): # DO DOCSTRINGS AND LOGGING
     try:
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -27,7 +27,7 @@ def check_database_connection():
         error_message = f"Database connection error: {e}"
         raise Exception(error_message) from e
 
-def check_table_exists(tablename: str):
+def check_table_exists(tablename: str): # DOCSTRINGS AND LOGGING
     try:
 
         conn = sqlite3.connect(DB_PATH)
@@ -48,7 +48,7 @@ def check_table_exists(tablename: str):
         raise Exception(error_message) from e
 
 @contextmanager
-def get_db_connection():
+def get_db_connection(): # DOCSTRINGS AND LOGGING
     conn = None
     try:
         conn = sqlite3.connect(DB_PATH)

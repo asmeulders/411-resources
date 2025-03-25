@@ -21,11 +21,11 @@ class Boxer:
     age: int
     weight_class: str = None
 
-    def __post_init__(self):
+    def __post_init__(self): # DO CHECKS?
         self.weight_class = get_weight_class(self.weight)  # Automatically assign weight class
 
 
-def create_boxer(name: str, weight: int, height: int, reach: float, age: int) -> None:
+def create_boxer(name: str, weight: int, height: int, reach: float, age: int) -> None: # DOCSTRINGS AND LOGGING
 
     if weight < 125:
         raise ValueError(f"Invalid weight: {weight}. Must be at least 125.")
@@ -59,7 +59,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         raise e
 
 
-def delete_boxer(boxer_id: int) -> None:
+def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
@@ -75,7 +75,7 @@ def delete_boxer(boxer_id: int) -> None:
         raise e
 
 
-def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]:
+def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS AND LOGGING
     query = """
         SELECT id, name, weight, height, reach, age, fights, wins,
                (wins * 1.0 / fights) AS win_pct
@@ -118,7 +118,7 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]:
         raise e
 
 
-def get_boxer_by_id(boxer_id: int) -> Boxer:
+def get_boxer_by_id(boxer_id: int) -> Boxer: # DOCSTRINGS AND LOGGING
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
@@ -142,7 +142,7 @@ def get_boxer_by_id(boxer_id: int) -> Boxer:
         raise e
 
 
-def get_boxer_by_name(boxer_name: str) -> Boxer:
+def get_boxer_by_name(boxer_name: str) -> Boxer: # DOCSTRINGS AND LOGGING
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
@@ -166,7 +166,7 @@ def get_boxer_by_name(boxer_name: str) -> Boxer:
         raise e
 
 
-def get_weight_class(weight: int) -> str:
+def get_weight_class(weight: int) -> str: # DOCSTRINGS AND LOGGING
     if weight >= 203:
         weight_class = 'HEAVYWEIGHT'
     elif weight >= 166:
@@ -181,7 +181,7 @@ def get_weight_class(weight: int) -> str:
     return weight_class
 
 
-def update_boxer_stats(boxer_id: int, result: str) -> None:
+def update_boxer_stats(boxer_id: int, result: str) -> None: # DOCSTRIGNS AND LOGGING
     if result not in {'win', 'loss'}:
         raise ValueError(f"Invalid result: {result}. Expected 'win' or 'loss'.")
 
