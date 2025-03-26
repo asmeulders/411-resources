@@ -14,9 +14,8 @@ RANDOM_ORG_URL = os.getenv("RANDOM_ORG_URL",
 
 
 def get_random() -> float: # DO DOCSTRINGS AND LOGGING
-    #DOCSTRINGS 
     """
-    Fetches a random integer between 1 and max inclusive from random.org.
+    Fetches a random float between 1 and max inclusive from random.org.
 
     Args:
         max (int): The upper bound (inclusive) for the random number.
@@ -28,7 +27,7 @@ def get_random() -> float: # DO DOCSTRINGS AND LOGGING
         RuntimeError: If the request to random.org fails.
         ValueError: If the response from random.org is not a valid integer.
     """
-    
+
     #does not have if and url statement 
 
     try:
