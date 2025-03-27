@@ -22,7 +22,7 @@ class Boxer:
     weight_class: str = None
 
     def __post_init__(self): # DO CHECKS?
-    """Initializes the BoxingModel with a weight and automatically assign weight class
+        """Initializes the BoxingModel with a weight and automatically assign weight class
 
         """
         self.weight_class = get_weight_class(self.weight)  # Automatically assign weight class
@@ -86,7 +86,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
 
 
 def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
-     """Removes a boxer by their boxer ID.
+    """Removes a boxer by their boxer ID.
 
         Args:
             boxer_id (int): The ID of the boxer to remove. 
@@ -94,7 +94,7 @@ def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
         Raises:
             ValueError: If the boxer ID is not found or is invalid.
 
-        """
+    """
     logger.info(f"Received request to remove boxer with ID {boxer_id}") #logging
 
     try:

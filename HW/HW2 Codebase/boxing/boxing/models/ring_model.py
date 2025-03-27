@@ -140,9 +140,9 @@ class RingModel: # DOCSTRINGS
         """
         # Arbitrary calculations
         age_modifier = -1 if boxer.age < 25 else (-2 if boxer.age > 35 else 0)
-        skill = (boxer.weight * len(boxer.name)) + (boxer.reach / 10) + age_modifier
-        logger.info(f"Retrieving boxer {boxer.name}'s skill: {skill} seconds")
-        return skill
+        fighting_skill = (boxer.weight * len(boxer.name)) + (boxer.reach / 10) + age_modifier
+        logger.info(f"Retrieving boxer {boxer.name}'s skill: {fighting_skill}")
+        return fighting_skill
 
     # def check_if_empty(self) -> None:
     #     """
