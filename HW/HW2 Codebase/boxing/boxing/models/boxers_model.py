@@ -41,6 +41,8 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         Raises:
             ValueError: If a boxer with the same name already exists. Or a 
                 boxer has an invalid weight, height, reach or age.
+            sqlite3.IntegrityError: If a boxer with the same compound key (name) already exists.
+            sqlite3.Error: If any database error occurs.
 
      """
     logger.info("Received request to add a song to the playlist") #logging
@@ -93,6 +95,7 @@ def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
 
         Raises:
             ValueError: If the boxer ID is not found or is invalid.
+            sqlite3.Error: If any database error occurs.
 
     """
     logger.info(f"Received request to remove boxer with ID {boxer_id}") #logging
@@ -123,6 +126,7 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS
 
         Raises:
             ValueError: If the sorting is invalid.
+            sqlite3.Error: If any database error occurs.
 
         """
 
@@ -169,7 +173,6 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS
     except sqlite3.Error as e:
         raise e
 
-#may need to add logger.info to confirm success of method
 def get_boxer_by_id(boxer_id: int) -> Boxer: # DOCSTRINGS AND LOGGING
     """Retrieves a boxer by their boxer ID.
 
@@ -181,6 +184,7 @@ def get_boxer_by_id(boxer_id: int) -> Boxer: # DOCSTRINGS AND LOGGING
 
         Raises:
             ValueError: If the boxer is not found.
+            sqlite3.Error: If any database error occurs.
 
         """
     try:
@@ -219,6 +223,7 @@ def get_boxer_by_name(boxer_name: str) -> Boxer: # DOCSTRINGS AND LOGGING
 
         Raises:
             ValueError: If the playlist is empty or the track number is invalid.
+            sqlite3.Error: If any database error occurs.
 
         """
     try:
@@ -284,6 +289,7 @@ def update_boxer_stats(boxer_id: int, result: str) -> None: # DOCSTRIGNS AND LOG
 
         Raises:
             ValueError: If the result is invalid or the boxer ID is not found.
+            sqlite3.Error: If any database error occurs.
 
         """
     if result not in {'win', 'loss'}:
