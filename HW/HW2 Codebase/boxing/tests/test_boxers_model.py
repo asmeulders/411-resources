@@ -170,11 +170,27 @@ def test_delete_boxer_bad_id(mock_cursor):
 
 ######################################################
 #
-#    Get Song
+#    Get Boxer
 #
 ######################################################
 
 #TODO get_leaderboard####################################################################
+def test_leaderboard(mock_cursor):
+    """Testing valid leaderboard by wins * 1.0 / fights
+
+    """
+    mock_cursor.fetchone.return_value = 
+
+    result = 
+
+
+def test_invalid_leaderboard(mock_cursor):
+    """Testing invalid leaderboard by wins * 1.0 / fights where sorting is invalid
+
+    """
+    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(must be between 18 and 40\)."):
+        create_boxers(name="Boxer Name", weight=200, height=170, reach=198.5, age="invalid")
+
 
 def test_get_boxer_by_id(mock_cursor):
     """Test getting a boxer by id.
@@ -240,17 +256,16 @@ def test_get_boxer_by_name_bad_id(mock_cursor):
     with pytest.raises(ValueError, match="Boxer with name 'Boxer Name' not found"):
         get_boxer_by_name("Boxer Name")
 
-##########################################################################
-#TODO:
+
 def get_weight_class_by_weight(mock_cursor):
     """Test getting a weight class by weight.
 
     """
     mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
 
-    result = get_weight_class("weight")
+    result = get_weight_class(mock_cursor.weight) #double check
 
-    expected_result = Boxer(1, "Boxer Name", 200, 170, 198.5, 30)
+    expected_result = 'MIDDLEWEIGHT'
 
     assert result == expected_result, f"Expected {expected_result}, got {result}"
 
@@ -260,7 +275,7 @@ def get_weight_class_by_weight(mock_cursor):
     assert actual_query == expected_query, "The SQL query did not match the expected structure."
 
     actual_arguments = mock_cursor.execute.call_args[0][1]
-    expected_arguments = ("Boxer Name")
+    expected_arguments = (mock_cursor.weight)
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
 
 def test_get_weight_class_by_bad_weight(mock_cursor):
@@ -270,11 +285,11 @@ def test_get_weight_class_by_bad_weight(mock_cursor):
     mock_cursor.fetchone.return_value = None
 
     with pytest.raises(ValueError, match="Weight class with 'weight' not found"):
-        get_weight_class_by_weight("weight")
+        get_weight_class_by_weight(mock_cursor.weight)
 
 ######################################################
 #
-#    Play count
+#    Update Boxer
 #
 ######################################################
 
