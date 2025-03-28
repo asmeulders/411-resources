@@ -24,6 +24,14 @@ from boxers.models.boxers_model import (
 def normalize_whitespace(sql_query: str) -> str:
     return re.sub(r'\s+', ' ', sql_query).strip()
 
+@pytest.fixture
+def sample_boxer1():
+    return Boxer(1, "Boxer 1", 200, 170, 198.5, 30)
+
+@pytest.fixture
+def sample_boxer2():
+    return Boxer(2, "Boxer 2", 240, 180, 190, 35)
+
 # Mocking the database connection for tests
 @pytest.fixture
 def mock_cursor(mocker):
@@ -174,22 +182,30 @@ def test_delete_boxer_bad_id(mock_cursor):
 #
 ######################################################
 
-#TODO get_leaderboard####################################################################
 def test_leaderboard(mock_cursor):
     """Testing valid leaderboard by wins * 1.0 / fights
 
     """
-    mock_cursor.fetchone.return_value = 
+    mock_cursor.fetchone.return_value = (True)
 
-    result = 
+    result = get_leaderboard("wins")
+
+    expected_result = [
+        [2, "Boxer 2", 240, 180, 190, 35, 'HEAVYWEIGHT', 2, 2, round(200, 1)]
+        [1, "Boxer 1", 200, 170, 198.5, 30, 'MIDDLEWEIGHT', 5, 4, round(400, 1)]
+    ]
+
+    assert result == expected_result, f"Expected {expected_result}, got {result}"
 
 
 def test_invalid_leaderboard(mock_cursor):
     """Testing invalid leaderboard by wins * 1.0 / fights where sorting is invalid
 
     """
-    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(must be between 18 and 40\)."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach=198.5, age="invalid")
+    mock_cursor.fetchone.return_value = None
+
+    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(must be a string wins or win_pct\)."):
+        get_leaderboard("losses")
 
 
 def test_get_boxer_by_id(mock_cursor):
