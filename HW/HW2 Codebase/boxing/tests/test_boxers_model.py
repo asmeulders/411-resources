@@ -180,7 +180,7 @@ def test_delete_boxer_bad_id(mock_cursor):
 
 ######################################################
 #
-#    Get Boxer
+#    Get Leaderboard
 #
 ######################################################
 
@@ -234,6 +234,11 @@ def test_invalid_leaderboard(mock_cursor):
     with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(invlaid sort\)."):
         get_leaderboard("invalid")
 
+######################################################
+#
+#    Get Boxer
+#
+######################################################
 
 def test_get_boxer_by_id(mock_cursor):
     """Test getting a boxer by id.
@@ -299,6 +304,11 @@ def test_get_boxer_by_name_bad_id(mock_cursor):
     with pytest.raises(ValueError, match="Boxer with name 'Boxer Name' not found"):
         get_boxer_by_name("Boxer Name")
 
+######################################################
+#
+#    Get Weight
+#
+######################################################
 
 def get_weight_class_by_weight(mock_cursor):
     """Test getting a weight class by weight.
