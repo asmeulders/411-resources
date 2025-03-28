@@ -4,6 +4,8 @@ import sqlite3
 
 import pytest
 
+from unittest.mock import MagicMock
+
 from boxers.models.boxers_model import (
     Boxer,
     create_boxer,
@@ -182,20 +184,45 @@ def test_delete_boxer_bad_id(mock_cursor):
 #
 ######################################################
 
-def test_leaderboard(mock_cursor):
-    """Testing valid leaderboard by wins * 1.0 / fights
+def test_leaderboard_with_wins(mock_db_connection, mocker):
+    """Testing valid leaderboard by wins
 
     """
-    mock_cursor.fetchone.return_value = (True)
+    mock_cursor = mocker.MagicMock()
+    mock_conn = mock_db_connection.return_value.__enter__.return_value
+    mock_conn.cursor.return_value = mock_cursor
 
-    result = get_leaderboard("wins")
 
-    expected_result = [
-        [2, "Boxer 2", 240, 180, 190, 35, 'HEAVYWEIGHT', 2, 2, round(200, 1)]
-        [1, "Boxer 1", 200, 170, 198.5, 30, 'MIDDLEWEIGHT', 5, 4, round(400, 1)]
+    mock_cursor.fetchall.return_value = [
+        (1, 'Boxer 1', 200, 170, 198.5, 30, 12, 10, 0.833),
+        (2, 'Boxer 2', 150, 175, 190.5, 28, 6, 5, 0.833)
     ]
 
-    assert result == expected_result, f"Expected {expected_result}, got {result}"
+    leaderboard = get_leaderboard("wins")
+
+    assert len(leaderboard) == 2
+    assert leaderboard[0]['name'] == 'Boxer 1'
+    assert leaderboard[0]['wins'] == 10
+    assert leaderboard[1]['name'] == 'Boxer 2'
+    assert leaderboard[0]['wins'] == 5
+
+def test_leaderboard_with_pct(mock_db_connection, mocker):
+    """Testing valid leaderboard by winp percentage (wins * 1.0 / fights)
+
+    """
+    mock_cursor = mocker.MagicMock()
+    mock_conn = mock_db_connection.return_value.__enter__.return_value
+    mock_conn.cursor.return_value = mock_cursor
+
+
+    mock_cursor.fetchall.return_value = [
+        (1, 'Boxer 1', 200, 170, 198.5, 30, 12, 10, 0.833),
+        (2, 'Boxer 2', 150, 175, 190.5, 28, 6, 5, 0.833)
+    ]
+
+    leaderboard = get_leaderboard("win_pct")
+
+    assert len(leaderboard) == 2
 
 
 def test_invalid_leaderboard(mock_cursor):
@@ -204,8 +231,8 @@ def test_invalid_leaderboard(mock_cursor):
     """
     mock_cursor.fetchone.return_value = None
 
-    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(must be a string wins or win_pct\)."):
-        get_leaderboard("losses")
+    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(invlaid sort\)."):
+        get_leaderboard("invalid")
 
 
 def test_get_boxer_by_id(mock_cursor):
