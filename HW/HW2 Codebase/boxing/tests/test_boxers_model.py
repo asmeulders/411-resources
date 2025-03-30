@@ -6,7 +6,7 @@ import pytest
 
 from unittest.mock import MagicMock
 
-from boxers.models.boxers_model import (
+from boxing.models.boxers_model import (
     Boxer,
     create_boxer,
     delete_boxer,
@@ -92,7 +92,7 @@ def test_create_boxer_duplicate(mock_cursor):
     mock_cursor.execute.side_effect = sqlite3.IntegrityError("UNIQUE constraint failed: boxers.name,")
 
     with pytest.raises(ValueError, match="Boxer with name 'Boxer Name' already exists."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
 
 
 def test_create_boxer_invalid_age():
@@ -100,10 +100,10 @@ def test_create_boxer_invalid_age():
 
     """
     with pytest.raises(ValueError, match=r"Invalid age: 10 \(must be between 18 and 40\)."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach=198.5, age=10)
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=10)
 
     with pytest.raises(ValueError, match=r"Invalid age: invalid \(must be between 18 and 40\)."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach=198.5, age="invalid")
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age="invalid")
 
 
 def test_create_boxer_invalid_reach():
@@ -111,30 +111,31 @@ def test_create_boxer_invalid_reach():
 
     """
     with pytest.raises(ValueError, match=r"Invalid reach: -5 \(must be a positive integer\)."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach=-5, age=30)
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=-5, age=30)
 
     with pytest.raises(ValueError, match=r"Invalid reach: invalid \(must be a positive integer\)."):
-        create_boxers(name="Boxer Name", weight=200, height=170, reach="invalid", age=30)
+        create_boxer(name="Boxer Name", weight=200, height=170, reach="invalid", age=30)
 
 def test_create_boxer_invalid_height():
     """Test error when trying to create a boxer with an invalid height (e.g., less than 0)
 
     """
     with pytest.raises(ValueError, match=r"Invalid height: -5 \(must be a positive integer\)."):
-        create_boxers(name="Boxer Name", weight=200, height=-5, reach=198.5, age=30)
+        create_boxer(name="Boxer Name", weight=200, height=-5, reach=198.5, age=30)
 
     with pytest.raises(ValueError, match=r"Invalid height: invalid \(must be a positive integer\)."):
-        create_boxers(name="Boxer Name", weight=200, height="invalid", reach=198.5, age=30)
+        create_boxer(name="Boxer Name", weight=200, height="invalid", reach=198.5, age=30)
 
 def test_create_boxer_invalid_weight():
     """Test error when trying to create a boxer with an invalid weight (e.g., less than 125)
 
     """
-    with pytest.raises(ValueError, match=r"Invalid weight: 120 \(must at least 125\)."):
-        create_boxers(name="Boxer Name", weight=120, height=170, reach=198.5, age=30)
-
-    with pytest.raises(ValueError, match=r"Invalid weight: invalid \(must be at least 125\)."):
-        create_boxers(name="Boxer Name", weight="invalid", height=170, reach=198.5, age=30)
+    inv_weight = 120
+    with pytest.raises(ValueError, match=f"Invalid weight: {inv_weight}. Must be at least 125."):
+        create_boxer(name="Boxer Name", weight=inv_weight, height=170, reach=198.5, age=30)
+    invalid = "invalid"
+    with pytest.raises(ValueError, match=f"Invalid weight: {invalid}. Must be at least 125."):
+        create_boxer(name="Boxer Name", weight=invalid, height=170, reach=198.5, age=30)
 
 def test_delete_boxer(mock_cursor):
     """Test deleting a boxer by boxer ID.

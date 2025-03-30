@@ -143,15 +143,3 @@ class RingModel: # DOCSTRINGS
         fighting_skill = (boxer.weight * len(boxer.name)) + (boxer.reach / 10) + age_modifier
         logger.info(f"Retrieving boxer {boxer.name}'s skill: {fighting_skill}")
         return fighting_skill
-
-    # def check_if_empty(self) -> None:
-    #     """
-    #     Checks if the ring is empty and raises a ValueError if it is.
-
-    #     Raises:
-    #         ValueError: If the ring is empty.
-
-    #     """
-    #     if not self.ring:
-    #         logger.error("Ring is empty")
-    #         raise ValueError("Ring is empty")

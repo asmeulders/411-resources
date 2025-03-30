@@ -49,16 +49,16 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
 
     #added logging statements to all if statements 
     #double check logging statements
-    if weight < 125:
+    if not isinstance(weight, int) or weight < 125:
         logger.error("Invalid weight: Weight must be at least 125")
         raise ValueError(f"Invalid weight: {weight}. Must be at least 125.")
-    if height <= 0:
+    if not isinstance(height, int) or height <= 0:
         logger.error("Invalid height: Height must be greater than 0.")
         raise ValueError(f"Invalid height: {height}. Must be greater than 0.")
-    if reach <= 0:
+    if not isinstance(reach, int) or reach <= 0:
         logger.error("Invalid reach: Reach must be greater than 0.")
         raise ValueError(f"Invalid reach: {reach}. Must be greater than 0.")
-    if not (18 <= age <= 40):
+    if not isinstance(age, int) or not (18 <= age <= 40):
         logger.error("Invalid age: age must be between 18 and 40.")
         raise ValueError(f"Invalid age: {age}. Must be between 18 and 40.")
 

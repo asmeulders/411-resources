@@ -17,7 +17,7 @@ def sample_boxer1():
 
 @pytest.fixture
 def sample_boxer2():
-    return Boxer(2, "Boxer 2", 0, 0, 0, 20)
+    return Boxer(2, "Mike Tyson", 220, 178, 180, 22)
 
 @pytest.fixture
 def sample_ring(sample_boxer1, sample_boxer2):
@@ -75,16 +75,17 @@ def test_get_boxers(ring_model, sample_ring):
     ring_model.ring.extend(sample_ring)
 
     all_boxers = ring_model.get_boxers()
+    
     assert len(all_boxers) == 2
     assert all_boxers[0].name == 'Muhammad Ali'
-    assert all_boxers[1].name == 'Boxer 2'
+    assert all_boxers[1].name == 'Mike Tyson'
 
 
-def test_get_fighting_skill(sample_boxer1):
+def test_get_fighting_skill(ring_model, sample_boxer1):
     """Test successfully retrieving a boxer's fighting skill.
     
     """
-    fighting_skill = sample_boxer1.get_fighting_skill()
+    fighting_skill = ring_model.get_fighting_skill(sample_boxer1)
 
     assert fighting_skill == 2849.8
 
@@ -92,7 +93,7 @@ def test_get_fighting_skill(sample_boxer1):
 # Fight Test Cases
 ##################################################
 
-def test_fight_successful(ring_model, sample_ring, sample_boxer1):
+def test_fight_successful(ring_model, sample_ring, sample_boxer1, sample_boxer2):
     """Test starting a fight in the ring successfully.
 
     """
@@ -100,7 +101,7 @@ def test_fight_successful(ring_model, sample_ring, sample_boxer1):
 
     winner = ring_model.fight()
 
-    assert winner == sample_boxer1.name
+    assert winner in (sample_boxer1.name, sample_boxer2.name)
 
     all_boxers = ring_model.get_boxers()
     assert len(all_boxers) == 0, "Ring should be cleared once finished"

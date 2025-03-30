@@ -31,7 +31,7 @@ def get_random() -> float: # DO DOCSTRINGS AND LOGGING
     #does not have if and url statement 
 
     try:
-        logger.info(f"Fetching random number from {url}") #log request to random.org 
+        logger.info(f"Fetching random number from {RANDOM_ORG_URL}") #log request to random.org 
         response = requests.get(RANDOM_ORG_URL, timeout=5)
 
         # Check if the request was successful
