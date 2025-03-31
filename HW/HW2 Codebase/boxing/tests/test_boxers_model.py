@@ -4,6 +4,9 @@ import sqlite3
 
 import pytest
 
+import unittest
+
+from unittest.mock import patch
 from unittest.mock import MagicMock
 
 from boxing.models.boxers_model import (
