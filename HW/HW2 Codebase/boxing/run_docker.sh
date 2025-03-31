@@ -5,7 +5,7 @@ IMAGE_NAME="boxing_image"
 CONTAINER_TAG=0.0.0.0
 HOST_PORT=5000
 CONTAINER_PORT=5000
-DB_VOLUME_PATH="sql"  # Adjust this to the desired host path for the database persistence
+DB_VOLUME_PATH="/app"  # Adjust this to the desired host path for the database persistence
 BUILD=true  # Set this to true if you want to build the image
 
 # Check if we need to build the Docker image
@@ -19,7 +19,8 @@ fi
 # Check if the database directory exists; if not, create it
 if [ ! -d "${DB_VOLUME_PATH}" ]; then
   echo "Creating database directory at ${DB_VOLUME_PATH}..."
-  mkdir database
+  mkdir data
+  docker volume create boxing_volume
 fi
 
 # Stop and remove the running container if it exists
@@ -41,5 +42,8 @@ fi
 
 # Run the Docker container with the necessary ports and volume mappings
 echo "Running Docker container..."
-docker run -d --name ${IMAGE_NAME}_container $IMAGE_NAME
+docker run -d \
+  --env-file .env \
+  -v boxing_volume:/app/data \
+  --name ${IMAGE_NAME}_container $IMAGE_NAME:$CONTAINER_TAG
 echo "Docker container is running on port ${HOST_PORT}."
