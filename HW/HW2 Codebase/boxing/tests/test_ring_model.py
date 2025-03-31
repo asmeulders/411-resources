@@ -1,6 +1,9 @@
 from dataclasses import asdict
 
 import pytest
+import unittest
+from unittest.mock import patch
+from pytest_mock import MockerFixture
 
 from boxing.models.ring_model import RingModel
 from boxing.models.boxers_model import Boxer
@@ -22,6 +25,11 @@ def sample_boxer2():
 @pytest.fixture
 def sample_ring(sample_boxer1, sample_boxer2):
     return [sample_boxer1, sample_boxer2]
+
+@pytest.fixture
+def mock_update_boxer_stats(mocker):
+    """Mock the update_boxer_stats function for testing purposes."""
+    return mocker.patch("boxing.models.boxing_model.update_boxer_stats")
 
 ##################################################
 # Add / Remove Boxer Management Test Cases
@@ -75,7 +83,7 @@ def test_get_boxers(ring_model, sample_ring):
     ring_model.ring.extend(sample_ring)
 
     all_boxers = ring_model.get_boxers()
-    
+
     assert len(all_boxers) == 2
     assert all_boxers[0].name == 'Muhammad Ali'
     assert all_boxers[1].name == 'Mike Tyson'
@@ -93,7 +101,7 @@ def test_get_fighting_skill(ring_model, sample_boxer1):
 # Fight Test Cases
 ##################################################
 
-def test_fight_successful(ring_model, sample_ring, sample_boxer1, sample_boxer2):
+def test_fight_successful(ring_model, sample_ring, sample_boxer1, sample_boxer2, mock_update_boxer_stats):
     """Test starting a fight in the ring successfully.
 
     """
@@ -101,7 +109,15 @@ def test_fight_successful(ring_model, sample_ring, sample_boxer1, sample_boxer2)
 
     winner = ring_model.fight()
 
-    assert winner in (sample_boxer1.name, sample_boxer2.name)
+    if winner.id == sample_boxer1.id:
+        loser = sample_boxer2
+    else:
+        loser = sample_boxer1
+
+    calls = [unittest.call.update_boxer_stats(winner.id, 'win'), unittest.call.update_boxer_stats(loser.id, 'loss')]
+    mock_update_boxer_stats.assert_has_calls(calls, any_order=False)
+
+    # assert winner in (sample_boxer1.name, sample_boxer2.name)
 
     all_boxers = ring_model.get_boxers()
     assert len(all_boxers) == 0, "Ring should be cleared once finished"
