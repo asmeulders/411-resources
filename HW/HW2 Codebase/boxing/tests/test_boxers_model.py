@@ -345,7 +345,7 @@ def test_get_weight_class_by_bad_weight(mock_cursor):
     """
     mock_cursor.fetchone.return_value = None
 
-    with pytest.raises(ValueError, match="Weight class with 'weight' not found"):
+    with pytest.raises(ValueError, match=f"Invalid weight: {weight}. Weight must be at least 125."):
         get_weight_class_by_weight(mock_cursor.weight)
 
 ######################################################
