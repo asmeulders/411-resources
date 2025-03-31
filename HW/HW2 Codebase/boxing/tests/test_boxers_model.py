@@ -214,7 +214,7 @@ def test_leaderboard_with_wins(mock_cursor):
     assert leaderboard[0]['name'] == 'Boxer 1'
     assert leaderboard[0]['wins'] == 10
     assert leaderboard[1]['name'] == 'Boxer 2'
-    assert leaderboard[0]['wins'] == 5
+    assert leaderboard[1]['wins'] == 5
 
 def test_leaderboard_with_pct(mock_cursor):
     """Testing valid leaderboard by winp percentage (wins * 1.0 / fights)
