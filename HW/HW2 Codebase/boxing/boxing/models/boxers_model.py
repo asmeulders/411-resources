@@ -299,7 +299,8 @@ def update_boxer_stats(boxer_id: int, result: str) -> None: # DOCSTRIGNS AND LOG
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
-
+            logger.info(f"Attempting to update boxer stat for boxer with ID {boxer_id}")
+    
             cursor.execute("SELECT id FROM boxers WHERE id = ?", (boxer_id,))
             if cursor.fetchone() is None:
                 logger.warning(f"Boxer with ID {boxer_id} not found.") #logging
@@ -311,6 +312,8 @@ def update_boxer_stats(boxer_id: int, result: str) -> None: # DOCSTRIGNS AND LOG
                 cursor.execute("UPDATE boxers SET fights = fights + 1 WHERE id = ?", (boxer_id,))
 
             conn.commit()
+
+            logger.info(f"Fight count incremented for boxer with ID: {boxer_id}")
 
     except sqlite3.Error as e:
         raise e

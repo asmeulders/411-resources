@@ -48,7 +48,7 @@ class RingModel: # DOCSTRINGS
         delta = abs(skill_1 - skill_2)
         normalized_delta = 1 / (1 + math.e ** (-delta))
 
-        random_number = get_random()
+        random_number = get_random(2 * normalized_delta)
 
         logger.info("Determining winner.")
         if random_number < normalized_delta:

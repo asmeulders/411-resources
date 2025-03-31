@@ -48,7 +48,7 @@ def test_add_bad_boxer_to_ring(ring_model, sample_boxer1):
     """Test error when a bad boxer enters the ring.
 
     """
-    with pytest.raises(TypeError, match="Boxer is not a valid Boxer instance"):
+    with pytest.raises(TypeError, match=f"Invalid type: Expected 'Boxer', got '{type(asdict(sample_boxer1)).__name__}'"):
         ring_model.enter_ring(asdict(sample_boxer1))
 
 

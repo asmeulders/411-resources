@@ -84,16 +84,16 @@ def get_db_connection(): # DOCSTRINGS AND LOGGING
     Raises:
         sqlite3.Error: If there is an issue connecting to the database.
 
-    """ # added
+    """
     conn = None
     try:
-        logger.info(f"Opening database connection to {DB_PATH}...") # added
+        logger.info(f"Opening database connection to {DB_PATH}...")
         conn = sqlite3.connect(DB_PATH)
         yield conn
     except sqlite3.Error as e:
-        logger.error(f"Database connection error: {e}") # added
+        logger.error(f"Database connection error: {e}")
         raise e
     finally:
         if conn:
             conn.close()
-            logger.info("Database connection closed.") # added
+            logger.info("Database connection closed.")

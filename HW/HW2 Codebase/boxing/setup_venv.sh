@@ -10,7 +10,7 @@ if [ ! -d "$VENV_DIR" ]; then
   python3 -m venv "$VENV_DIR"
 
   echo "Activating virtual environment..."
-  source "$VENV_DIR/bin/activate"
+  source "$VENV_DIR"/bin/activate
 
   # Install dependencies from requirements.lock if it exists
   if [ -f "$REQUIREMENTS_FILE" ]; then
@@ -23,5 +23,5 @@ if [ ! -d "$VENV_DIR" ]; then
   fi
 else
   echo "Virtual environment already exists. Activated."
-  source "$VENV_DIR/bin/activate"
+  source "$VENV_DIR"/bin/activate
 fi
