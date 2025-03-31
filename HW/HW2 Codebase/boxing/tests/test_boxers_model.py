@@ -24,6 +24,8 @@ from boxing.models.boxers_model import (
 #################################################################
 #ask about boxer name
 #type errory mock and int
+#source setup_venv.sh
+#/run_docker.sh
 
 ######################################################
 #
@@ -236,15 +238,14 @@ def test_leaderboard_with_pct(mock_db_connection, mocker):
 
     assert len(leaderboard) == 2
 
-
-def test_invalid_leaderboard(mock_cursor):
+def test_invalid_leaderboard_wins(mock_cursor):
     """Testing invalid leaderboard by wins * 1.0 / fights where sorting is invalid
 
     """
     mock_cursor.fetchone.return_value = None
-    sort_by = 'win_pct'
+    sort_by = 'loss'
     with pytest.raises(ValueError, match=f"Invalid sort_by parameter: {sort_by}"):
-        get_leaderboard("invalid")
+        get_leaderboard('loss')
 
 ######################################################
 #
@@ -326,16 +327,20 @@ def get_weight_class_by_weight(mock_cursor):
     """Test getting a weight class by weight.
 
     """
-    mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
+    #mock_cursor = MagicMock
+    #mock_cursor.fetchone = MagicMock(return_value=200)
 
-    result = get_weight_class(mock_cursor.weight) #double check
+    #result = get_weight_class(mock_cursor.fetchone()) #double check
+    ###################
+    mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
+    result = get_weight_class(mock_cursor.fetchone()) #double check
 
     expected_result = 'MIDDLEWEIGHT'
 
     assert result == expected_result, f"Expected {expected_result}, got {result}"
 
     expected_query = normalize_whitespace("SELECT id, name, weight, height, reach, age FROM boxers WHERE name = ?")
-    actual_query = normalize_whitespace(mock_cursor.execute.call_args[0][0])
+    actual_query = normalize_whitespace(mock_cursor.execute.call_args[0][2]) #edited indices
 
     assert actual_query == expected_query, "The SQL query did not match the expected structure."
 
@@ -350,7 +355,7 @@ def test_get_weight_class_by_bad_weight(mock_cursor):
     mock_cursor.fetchone.return_value = None
     weight = 120
     with pytest.raises(ValueError, match=f"Invalid weight: {weight}. Weight must be at least 125."):
-        get_weight_class_by_weight(mock_cursor.weight)
+        get_weight_class_by_weight(weight)
 
 ######################################################
 #
@@ -366,10 +371,11 @@ def test_update_boxer_stats(mock_cursor):
     mock_cursor.fetchone.return_value = True
 
     boxer_id = 1
-    update_boxer_stats(boxer_id)
+    result = 'win'
+    update_boxer_stats(boxer_id, result)
 
     expected_query = normalize_whitespace("""
-        UPDATE boxers SET boxer_count = boxer_count + 1 WHERE id = ?
+        UPDATE boxers SET fights = fights + 1, wins = wins + 1 WHERE id = ?
     """)
     actual_query = normalize_whitespace(mock_cursor.execute.call_args_list[1][0][0])
 
@@ -384,14 +390,16 @@ def test_update_boxer_stats(mock_cursor):
 
 def test_update_boxer_stats_bad_result(mock_cursor):
     mock_cursor.fetchone.return_value = None
+    boxer_id = 1
     result = 'tie'
     with pytest.raises(ValueError, match=f"Invalid result: {result}. Expected 'win' or 'loss'."):
-        get_weight_class_by_weight(mock_cursor.weight)
+        update_boxer_stats(boxer_id, result)
 
 
 
 def test_update_boxer_stats_bad_id(mock_cursor):
     mock_cursor.fetchone.return_value = None
     boxer_id = 999
+    result = 'win'
     with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
-        get_weight_class_by_weight(mock_cursor.weight)
+        update_boxer_stats(boxer_id, result)

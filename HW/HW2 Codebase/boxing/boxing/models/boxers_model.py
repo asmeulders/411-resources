@@ -233,7 +233,7 @@ def get_boxer_by_name(boxer_name: str) -> Boxer: # DOCSTRINGS AND LOGGING
             cursor.execute("""
                 SELECT id, name, weight, height, reach, age
                 FROM boxers WHERE name = ?
-            """, (boxer_name,))
+            """, (boxer_name))
 
             row = cursor.fetchone()
 
