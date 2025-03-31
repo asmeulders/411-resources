@@ -45,22 +45,23 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
             sqlite3.Error: If any database error occurs.
 
      """
-    logger.info("Received request to add a song to the playlist") #logging
+    logger.info("Received request to add a boxer") #logging
 
     #added logging statements to all if statements 
-    #double check logging statements
+    #TODO: max weight/name/reach 
     if not isinstance(weight, int) or weight < 125:
-        logger.error("Invalid weight: Weight must be at least 125")
+        logger.error(f"Invalid weight provided: {weight}")
         raise ValueError(f"Invalid weight: {weight}. Must be at least 125.")
     if not isinstance(height, int) or height <= 0:
-        logger.error("Invalid height: Height must be greater than 0.")
+        logger.error(f"Invalid height provided: {height}")
         raise ValueError(f"Invalid height: {height}. Must be greater than 0.")
-    if not isinstance(reach, int) or reach <= 0:
-        logger.error("Invalid reach: Reach must be greater than 0.")
+    if not isinstance(reach, float) or reach <= 0:
+        logger.error(f"Invalid reach provided: {reach}")
         raise ValueError(f"Invalid reach: {reach}. Must be greater than 0.")
     if not isinstance(age, int) or not (18 <= age <= 40):
-        logger.error("Invalid age: age must be between 18 and 40.")
+        logger.error(f"Invalid age provided: {age}")
         raise ValueError(f"Invalid age: {age}. Must be between 18 and 40.")
+
 
     try: 
         with get_db_connection() as conn:
@@ -122,7 +123,7 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]: # DOCSTRINGS
             sort_by (str): String sorting the most amout of wins.
 
         Returns:
-            Song: List representing the leaderboard by the amount of wins 
+            List: List representing the leaderboard by the amount of wins 
 
         Raises:
             ValueError: If the sorting is invalid.

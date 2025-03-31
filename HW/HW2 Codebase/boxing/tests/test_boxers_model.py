@@ -55,7 +55,7 @@ def mock_cursor(mocker):
     def mock_get_db_connection():
         yield mock_conn  # Yield the mocked connection object
 
-    mocker.patch("boxers.models.boxers_model.get_db_connection", mock_get_db_connection) #changed 
+    mocker.patch("boxing.models.boxers_model.get_db_connection", mock_get_db_connection) #changed 
 
     return mock_cursor  # Return the mock cursor so we can set expectations per test
 
@@ -94,8 +94,8 @@ def test_create_boxer_duplicate(mock_cursor):
     """
     # Simulate that the database will raise an IntegrityError due to a duplicate entry
     mock_cursor.execute.side_effect = sqlite3.IntegrityError("UNIQUE constraint failed: boxers.name,")
-
-    with pytest.raises(ValueError, match="Boxer with name 'Boxer Name' already exists."):
+    name = 'Boxer 1'
+    with pytest.raises(ValueError, match=f"Boxer with name '{name}' already exists"):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
 
 
@@ -104,10 +104,10 @@ def test_create_boxer_invalid_age():
 
     """
     inv_age = 10
-    with pytest.raises(ValueError, match=f"Invalid age: {inv_age} Must be between 18 and 40."):
+    with pytest.raises(ValueError, match=f"Invalid age: {inv_age}. Must be between 18 and 40."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=inv_age)
     invalid = "invalid"
-    with pytest.raises(ValueError, match=f"Invalid age: {invalid} Must be between 18 and 40."):
+    with pytest.raises(ValueError, match=f"Invalid age: {invalid}. Must be between 18 and 40."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=invalid)
 
 
@@ -116,10 +116,10 @@ def test_create_boxer_invalid_reach():
 
     """
     inv_reach = -5
-    with pytest.raises(ValueError, match=f"Invalid reach: {inv_reach} Must be a positive integer."):
+    with pytest.raises(ValueError, match=f"Invalid reach: {inv_reach}. Must be greater than 0."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=inv_reach, age=30)
     invalid = "invalid"
-    with pytest.raises(ValueError, match=f"Invalid reach: {invalid} Must be a positive integer."):
+    with pytest.raises(ValueError, match=f"Invalid reach: {invalid}. Must be greater than 0."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=invalid, age=30)
 
 def test_create_boxer_invalid_height():
@@ -127,10 +127,10 @@ def test_create_boxer_invalid_height():
 
     """
     inv_height = -5
-    with pytest.raises(ValueError, match=f"Invalid height: {inv_height}. Must be a positive integer."):
+    with pytest.raises(ValueError, match=f"Invalid height: {inv_height}. Must be greater than 0."):
         create_boxer(name="Boxer Name", weight=200, height=inv_height, reach=198.5, age=30)
     invalid = "invalid"
-    with pytest.raises(ValueError, match=f"Invalid height: {invalid}. Must be a positive integer."):
+    with pytest.raises(ValueError, match=f"Invalid height: {invalid}. Must be greater than 0."):
         create_boxer(name="Boxer Name", weight=200, height=invalid, reach=198.5, age=30)
 
 def test_create_boxer_invalid_weight():
@@ -181,8 +181,8 @@ def test_delete_boxer_bad_id(mock_cursor):
     """
     # Simulate that no boxer exists with the given ID
     mock_cursor.fetchone.return_value = None
-
-    with pytest.raises(ValueError, match="boxer with ID 999 not found"):
+    boxer_id = 999
+    with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
         delete_boxer(999)
 
 
@@ -239,7 +239,7 @@ def test_invalid_leaderboard(mock_cursor):
     """
     mock_cursor.fetchone.return_value = None
 
-    with pytest.raises(ValueError, match=r"Invalid leaderboard: invalid \(invlaid sort\)."):
+    with pytest.raises(ValueError, match=f"Invalid sort_by parameter: {sort_by}"):
         get_leaderboard("invalid")
 
 ######################################################
@@ -271,13 +271,13 @@ def test_get_boxer_by_id(mock_cursor):
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
 
 
-def test_get_boxer_by_id_bad_id(mock_cursor):
+def test_get_boxer_by_bad_id(mock_cursor):
     """Test error when getting a non-existent boxer.
 
     """
     mock_cursor.fetchone.return_value = None
 
-    with pytest.raises(ValueError, match="Boxer with ID 999 not found"):
+    with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
         get_boxer_by_id(999)
 
 
@@ -303,13 +303,13 @@ def test_get_boxer_by_name(mock_cursor):
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
 
 
-def test_get_boxer_by_name_bad_id(mock_cursor):
+def test_get_boxer_by_bad_name(mock_cursor):
     """Test error when getting a non-existent boxer.
 
     """
     mock_cursor.fetchone.return_value = None
 
-    with pytest.raises(ValueError, match="Boxer with name 'Boxer Name' not found"):
+    with pytest.raises(ValueError, match=f"Boxer '{boxer_name}' not found."):
         get_boxer_by_name("Boxer Name")
 
 ######################################################
@@ -375,3 +375,19 @@ def test_update_boxer_stats(mock_cursor):
     expected_arguments = (boxer_id,)
 
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
+
+
+
+def test_update_boxer_stats_bad_result(mock_cursor):
+    mock_cursor.fetchone.return_value = None
+
+    with pytest.raises(ValueError, match=f"Invalid result: {result}. Expected 'win' or 'loss'."):
+        get_weight_class_by_weight(mock_cursor.weight)
+
+
+
+def test_update_boxer_stats_bad_id(mock_cursor):
+    mock_cursor.fetchone.return_value = None
+
+    with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
+        get_weight_class_by_weight(mock_cursor.weight)
