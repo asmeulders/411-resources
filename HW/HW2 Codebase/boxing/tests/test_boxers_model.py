@@ -77,7 +77,7 @@ def test_create_boxer(mock_cursor):
     """Test creating a new boxer.
 
     """
-    create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
+    create_boxer(name="Boxer 1", weight=200, height=170, reach=198.5, age=30)
 
     expected_query = normalize_whitespace("""
         INSERT INTO boxers (name, weight, height, reach, age)
@@ -89,7 +89,7 @@ def test_create_boxer(mock_cursor):
 
     # Extract the arguments used in the SQL call (second element of call_args)
     actual_arguments = mock_cursor.execute.call_args[0][1]
-    expected_arguments = ("Boxer Name", 200, 170, 198.5, 30)
+    expected_arguments = ("Boxer 1", 200, 170, 198.5, 30)
 
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
 
@@ -100,9 +100,9 @@ def test_create_boxer_duplicate(mock_cursor):
     """
     # Simulate that the database will raise an IntegrityError due to a duplicate entry
     mock_cursor.execute.side_effect = sqlite3.IntegrityError("UNIQUE constraint failed: boxers.name,")
-    name = 'Boxer Name'
+    name = 'Boxer 777'
     with pytest.raises(ValueError, match=f"Boxer with name '{name}' already exists"):
-        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
+        create_boxer(name="Boxer 777", weight=200, height=170, reach=198.5, age=30)
 
 
 def test_create_boxer_invalid_age():
@@ -198,14 +198,10 @@ def test_delete_boxer_bad_id(mock_cursor):
 #
 ######################################################
 
-def test_leaderboard_with_wins(mock_db_connection, mocker):
+def test_leaderboard_with_wins(mock_cursor):
     """Testing valid leaderboard by wins
 
     """
-    mock_cursor = mocker.MagicMock()
-    mock_conn = mock_db_connection.return_value.__enter__.return_value
-    mock_conn.cursor.return_value = mock_cursor
-
 
     mock_cursor.fetchall.return_value = [
         (1, 'Boxer 1', 200, 170, 198.5, 30, 12, 10, 0.833),
@@ -220,15 +216,10 @@ def test_leaderboard_with_wins(mock_db_connection, mocker):
     assert leaderboard[1]['name'] == 'Boxer 2'
     assert leaderboard[0]['wins'] == 5
 
-def test_leaderboard_with_pct(mock_db_connection, mocker):
+def test_leaderboard_with_pct(mock_cursor):
     """Testing valid leaderboard by winp percentage (wins * 1.0 / fights)
 
     """
-    mock_cursor = mocker.MagicMock()
-    mock_conn = mock_db_connection.return_value.__enter__.return_value
-    mock_conn.cursor.return_value = mock_cursor
-
-
     mock_cursor.fetchall.return_value = [
         (1, 'Boxer 1', 200, 170, 198.5, 30, 12, 10, 0.833),
         (2, 'Boxer 2', 150, 175, 190.5, 28, 6, 5, 0.833)
@@ -332,8 +323,10 @@ def get_weight_class_by_weight(mock_cursor):
 
     #result = get_weight_class(mock_cursor.fetchone()) #double check
     ###################
-    mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
-    result = get_weight_class(mock_cursor.fetchone()) #double check
+    mock_cursor.fetchone.return_value = (200)
+    if isinstance(weight, tuple):
+        weight = weight[0] 
+    result = get_weight_class(weight) #double check
 
     expected_result = 'MIDDLEWEIGHT'
 
@@ -355,7 +348,7 @@ def test_get_weight_class_by_bad_weight(mock_cursor):
     mock_cursor.fetchone.return_value = None
     weight = 120
     with pytest.raises(ValueError, match=f"Invalid weight: {weight}. Weight must be at least 125."):
-        get_weight_class_by_weight(weight)
+        get_weight_class(weight)
 
 ######################################################
 #
