@@ -139,20 +139,20 @@ get_boxer_by_name() {
   fi
 }
 
-get_random_song() {
-  echo "Getting a random song from the catalog..."
-  response=$(curl -s -X GET "$BASE_URL/get-random-song")
-  if echo "$response" | grep -q '"status": "success"'; then
-    echo "Random song retrieved successfully."
-    if [ "$ECHO_JSON" = true ]; then
-      echo "Random Song JSON:"
-      echo "$response" | jq .
-    fi
-  else
-    echo "Failed to get a random song."
-    exit 1
-  fi
-}
+# get_random_song() {
+#   echo "Getting a random song from the catalog..."
+#   response=$(curl -s -X GET "$BASE_URL/get-random-song")
+#   if echo "$response" | grep -q '"status": "success"'; then
+#     echo "Random song retrieved successfully."
+#     if [ "$ECHO_JSON" = true ]; then
+#       echo "Random Song JSON:"
+#       echo "$response" | jq .
+#     fi
+#   else
+#     echo "Failed to get a random song."
+#     exit 1
+#   fi
+# }
 
 
 ############################################################
@@ -161,10 +161,12 @@ get_random_song() {
 #
 ############################################################
 
-add_song_to_playlist() {
-  artist=$1
-  title=$2
-  year=$3
+enter_ring() {
+  name=$1
+  weight=$2
+  height=$3
+  reach=$4
+  age=$5
 
   echo "Adding song to playlist: $artist - $title ($year)..."
   response=$(curl -s -X POST "$BASE_URL/add-song-to-playlist" \
@@ -502,7 +504,7 @@ get_boxers
 
 get_boxer_by_id 2
 get_boxer_by_name "Muhammad Ali"
-get_random_song
+# get_random_song
 
 add_song_to_playlist "The Rolling Stones" "Paint It Black" 1966
 add_song_to_playlist "Queen" "Bohemian Rhapsody" 1975

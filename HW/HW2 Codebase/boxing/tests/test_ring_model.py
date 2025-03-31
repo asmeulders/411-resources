@@ -29,7 +29,7 @@ def sample_ring(sample_boxer1, sample_boxer2):
 @pytest.fixture
 def mock_update_boxer_stats(mocker):
     """Mock the update_boxer_stats function for testing purposes."""
-    return mocker.patch("boxing.models.boxers_model.update_boxer_stats")
+    return mocker.patch("boxing.models.ring_model.update_boxer_stats")
 
 ##################################################
 # Add / Remove Boxer Management Test Cases
@@ -109,18 +109,19 @@ def test_fight_successful(ring_model, sample_ring, sample_boxer1, sample_boxer2,
 
     winner = ring_model.fight()
 
-    if winner.id == sample_boxer1.id:
-        loser = sample_boxer2
+    if winner == sample_boxer1.name:
+        winner_id = sample_boxer1.id
+        loser_id = sample_boxer2.id
     else:
-        loser = sample_boxer1
+        winner_id = sample_boxer2.id
+        loser_id = sample_boxer1.id
 
-    calls = [unittest.call.update_boxer_stats(winner.id, 'win'), unittest.call.update_boxer_stats(loser.id, 'loss')]
-    mock_update_boxer_stats.assert_has_calls(calls, any_order=False)
+    mock_update_boxer_stats.assert_any_call(winner_id, 'win')
+    mock_update_boxer_stats.assert_any_call(loser_id, 'loss')
 
     # assert winner in (sample_boxer1.name, sample_boxer2.name)
 
-    all_boxers = ring_model.get_boxers()
-    assert len(all_boxers) == 0, "Ring should be cleared once finished"
+    assert len(ring_model.ring) == 0, "Ring should be cleared once finished"
 
 
 def test_fight_unsuccessful(ring_model, sample_boxer1):
