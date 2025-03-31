@@ -22,8 +22,6 @@ from boxing.models.boxers_model import (
 )
 
 #################################################################
-#ask about boxer name
-#type errory mock and int
 #source setup_venv.sh
 #/run_docker.sh
 
@@ -68,13 +66,13 @@ def mock_cursor(mocker):
 
 ######################################################
 #
-#    Add and delete
+#    Create and delete
 #
 ######################################################
 
 
 def test_create_boxer(mock_cursor):
-    """Test creating a new boxer.
+    """Test: successfully creating a new boxer.
 
     """
     create_boxer(name="Boxer 1", weight=200, height=170, reach=198.5, age=30)
@@ -181,7 +179,7 @@ def test_delete_boxer_by_id(mock_cursor):
     assert actual_delete_args == expected_delete_args, f"The UPDATE query arguments did not match. Expected {expected_delete_args}, got {actual_delete_args}."
 
 
-def test_delete_boxer_bad_id(mock_cursor):
+def test_delete_boxer_no_id(mock_cursor):
     """Test error when trying to delete a non-existent boxer.
 
     """
@@ -229,8 +227,8 @@ def test_leaderboard_with_pct(mock_cursor):
 
     assert len(leaderboard) == 2
 
-def test_invalid_leaderboard_wins(mock_cursor):
-    """Testing invalid leaderboard by wins * 1.0 / fights where sorting is invalid
+def test_invalid_leaderboard(mock_cursor):
+    """Testing invalid sorting leaderboard where sort_by is not win_pct or wins
 
     """
     mock_cursor.fetchone.return_value = None
@@ -245,7 +243,7 @@ def test_invalid_leaderboard_wins(mock_cursor):
 ######################################################
 
 def test_get_boxer_by_id(mock_cursor):
-    """Test getting a boxer by id.
+    """Test getting a boxer by ID.
 
     """
     mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
@@ -318,15 +316,10 @@ def get_weight_class_by_weight(mock_cursor):
     """Test getting a weight class by weight.
 
     """
-    #mock_cursor = MagicMock
-    #mock_cursor.fetchone = MagicMock(return_value=200)
-
-    #result = get_weight_class(mock_cursor.fetchone()) #double check
-    ###################
     mock_cursor.fetchone.return_value = (200)
     if isinstance(weight, tuple):
         weight = weight[0] 
-    result = get_weight_class(weight) #double check
+    result = get_weight_class(weight) 
 
     expected_result = 'MIDDLEWEIGHT'
 
@@ -382,6 +375,9 @@ def test_update_boxer_stats(mock_cursor):
 
 
 def test_update_boxer_stats_bad_result(mock_cursor):
+    """ Test updating a boxer's stats with an invalid result that is not a win or loss
+
+    """
     mock_cursor.fetchone.return_value = None
     boxer_id = 1
     result = 'tie'
@@ -391,6 +387,9 @@ def test_update_boxer_stats_bad_result(mock_cursor):
 
 
 def test_update_boxer_stats_bad_id(mock_cursor):
+    """ Test updating a boxer's stats with a non-existent/invalid ID
+
+    """
     mock_cursor.fetchone.return_value = None
     boxer_id = 999
     result = 'win'
