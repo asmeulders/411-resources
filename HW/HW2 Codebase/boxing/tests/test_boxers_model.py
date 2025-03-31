@@ -3,7 +3,7 @@ import re
 import sqlite3
 
 import pytest
-from pytest import mocker 
+from pytest_mock import MockerFixture
 
 import unittest
 
@@ -106,7 +106,7 @@ def test_create_boxer_invalid_age():
     inv_age = 10
     with pytest.raises(ValueError, match=f"Invalid age: {inv_age} Must be between 18 and 40."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=inv_age)
-
+    invalid = "invalid"
     with pytest.raises(ValueError, match=f"Invalid age: {invalid} Must be between 18 and 40."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=invalid)
 
@@ -118,7 +118,7 @@ def test_create_boxer_invalid_reach():
     inv_reach = -5
     with pytest.raises(ValueError, match=f"Invalid reach: {inv_reach} Must be a positive integer."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=inv_reach, age=30)
-
+    invalid = "invalid"
     with pytest.raises(ValueError, match=f"Invalid reach: {invalid} Must be a positive integer."):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=invalid, age=30)
 
@@ -129,7 +129,7 @@ def test_create_boxer_invalid_height():
     inv_height = -5
     with pytest.raises(ValueError, match=f"Invalid height: {inv_height}. Must be a positive integer."):
         create_boxer(name="Boxer Name", weight=200, height=inv_height, reach=198.5, age=30)
-
+    invalid = "invalid"
     with pytest.raises(ValueError, match=f"Invalid height: {invalid}. Must be a positive integer."):
         create_boxer(name="Boxer Name", weight=200, height=invalid, reach=198.5, age=30)
 

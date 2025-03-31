@@ -29,7 +29,7 @@ def sample_ring(sample_boxer1, sample_boxer2):
 @pytest.fixture
 def mock_update_boxer_stats(mocker):
     """Mock the update_boxer_stats function for testing purposes."""
-    return mocker.patch("boxing.models.boxing_model.update_boxer_stats")
+    return mocker.patch("boxing.models.boxers_model.update_boxer_stats")
 
 ##################################################
 # Add / Remove Boxer Management Test Cases
