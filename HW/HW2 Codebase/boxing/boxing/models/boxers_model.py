@@ -41,7 +41,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         Raises:
             ValueError: If a boxer with the same name already exists. Or a 
                 boxer has an invalid weight, height, reach or age.
-            sqlite3.IntegrityError: If a boxer with the same compound key (name) already exists.
+            sqlite3.IntegrityError: If a boxer with the same name already exists.
             sqlite3.Error: If any database error occurs.
 
      """
@@ -88,7 +88,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         raise e
 
 
-def delete_boxer(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
+def delete_boxer_by_id(boxer_id: int) -> None: # DOCSTRINGS AND LOGGING
     """Removes a boxer by their boxer ID.
 
         Args:

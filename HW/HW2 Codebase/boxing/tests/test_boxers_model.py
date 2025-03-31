@@ -13,7 +13,7 @@ from unittest.mock import MagicMock
 from boxing.models.boxers_model import (
     Boxer,
     create_boxer,
-    delete_boxer,
+    delete_boxer_by_id,
     get_leaderboard,
     get_boxer_by_id,
     get_boxer_by_name,
@@ -148,7 +148,7 @@ def test_create_boxer_invalid_weight():
     with pytest.raises(ValueError, match=f"Invalid weight: {invalid}. Must be at least 125."):
         create_boxer(name="Boxer Name", weight=invalid, height=170, reach=198.5, age=30)
 
-def test_delete_boxer(mock_cursor):
+def test_delete_boxer_by_id(mock_cursor):
     """Test deleting a boxer by boxer ID.
 
     """
@@ -156,7 +156,7 @@ def test_delete_boxer(mock_cursor):
     # We can use any value other than None
     mock_cursor.fetchone.return_value = (True)
 
-    delete_boxer(1)
+    delete_boxer_by_id(1)
 
     expected_select_sql = normalize_whitespace("SELECT id FROM boxers WHERE id = ?")
     expected_delete_sql = normalize_whitespace("DELETE FROM boxers WHERE id = ?")
@@ -187,7 +187,7 @@ def test_delete_boxer_bad_id(mock_cursor):
     mock_cursor.fetchone.return_value = None
     boxer_id = 999
     with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
-        delete_boxer(999)
+        delete_boxer_by_id(999)
 
 
 ######################################################
