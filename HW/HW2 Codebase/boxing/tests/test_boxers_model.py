@@ -3,6 +3,7 @@ import re
 import sqlite3
 
 import pytest
+from pytest import mocker 
 
 import unittest
 
@@ -102,32 +103,35 @@ def test_create_boxer_invalid_age():
     """Test error when trying to create a boxer with an invalid age (e.g., less than 18 or greater than 40)
 
     """
-    with pytest.raises(ValueError, match=r"Invalid age: 10 \(must be between 18 and 40\)."):
-        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=10)
+    inv_age = 10
+    with pytest.raises(ValueError, match=f"Invalid age: {inv_age} Must be between 18 and 40."):
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=inv_age)
 
-    with pytest.raises(ValueError, match=r"Invalid age: invalid \(must be between 18 and 40\)."):
-        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age="invalid")
+    with pytest.raises(ValueError, match=f"Invalid age: {invalid} Must be between 18 and 40."):
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=invalid)
 
 
 def test_create_boxer_invalid_reach():
     """Test error when trying to create a boxer with an invalid reach (e.g., less than 0)
 
     """
-    with pytest.raises(ValueError, match=r"Invalid reach: -5 \(must be a positive integer\)."):
-        create_boxer(name="Boxer Name", weight=200, height=170, reach=-5, age=30)
+    inv_reach = -5
+    with pytest.raises(ValueError, match=f"Invalid reach: {inv_reach} Must be a positive integer."):
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=inv_reach, age=30)
 
-    with pytest.raises(ValueError, match=r"Invalid reach: invalid \(must be a positive integer\)."):
-        create_boxer(name="Boxer Name", weight=200, height=170, reach="invalid", age=30)
+    with pytest.raises(ValueError, match=f"Invalid reach: {invalid} Must be a positive integer."):
+        create_boxer(name="Boxer Name", weight=200, height=170, reach=invalid, age=30)
 
 def test_create_boxer_invalid_height():
     """Test error when trying to create a boxer with an invalid height (e.g., less than 0)
 
     """
-    with pytest.raises(ValueError, match=r"Invalid height: -5 \(must be a positive integer\)."):
-        create_boxer(name="Boxer Name", weight=200, height=-5, reach=198.5, age=30)
+    inv_height = -5
+    with pytest.raises(ValueError, match=f"Invalid height: {inv_height}. Must be a positive integer."):
+        create_boxer(name="Boxer Name", weight=200, height=inv_height, reach=198.5, age=30)
 
-    with pytest.raises(ValueError, match=r"Invalid height: invalid \(must be a positive integer\)."):
-        create_boxer(name="Boxer Name", weight=200, height="invalid", reach=198.5, age=30)
+    with pytest.raises(ValueError, match=f"Invalid height: {invalid}. Must be a positive integer."):
+        create_boxer(name="Boxer Name", weight=200, height=invalid, reach=198.5, age=30)
 
 def test_create_boxer_invalid_weight():
     """Test error when trying to create a boxer with an invalid weight (e.g., less than 125)
