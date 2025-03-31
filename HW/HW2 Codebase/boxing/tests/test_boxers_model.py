@@ -21,6 +21,10 @@ from boxing.models.boxers_model import (
     update_boxer_stats
 )
 
+#################################################################
+#ask about boxer name
+#type errory mock and int
+
 ######################################################
 #
 #    Fixtures
@@ -94,7 +98,7 @@ def test_create_boxer_duplicate(mock_cursor):
     """
     # Simulate that the database will raise an IntegrityError due to a duplicate entry
     mock_cursor.execute.side_effect = sqlite3.IntegrityError("UNIQUE constraint failed: boxers.name,")
-    name = 'Boxer 1'
+    name = 'Boxer Name'
     with pytest.raises(ValueError, match=f"Boxer with name '{name}' already exists"):
         create_boxer(name="Boxer Name", weight=200, height=170, reach=198.5, age=30)
 
@@ -238,7 +242,7 @@ def test_invalid_leaderboard(mock_cursor):
 
     """
     mock_cursor.fetchone.return_value = None
-
+    sort_by = 'win_pct'
     with pytest.raises(ValueError, match=f"Invalid sort_by parameter: {sort_by}"):
         get_leaderboard("invalid")
 
@@ -276,7 +280,7 @@ def test_get_boxer_by_bad_id(mock_cursor):
 
     """
     mock_cursor.fetchone.return_value = None
-
+    boxer_id = 999
     with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
         get_boxer_by_id(999)
 
@@ -287,7 +291,7 @@ def test_get_boxer_by_name(mock_cursor):
     """
     mock_cursor.fetchone.return_value = (1, "Boxer Name", 200, 170, 198.5, 30, False)
 
-    result = get_boxer_by_name("Boxer Name")
+    result = get_boxer_by_name('Boxer Name')
 
     expected_result = Boxer(1, "Boxer Name", 200, 170, 198.5, 30)
 
@@ -308,9 +312,9 @@ def test_get_boxer_by_bad_name(mock_cursor):
 
     """
     mock_cursor.fetchone.return_value = None
-
+    boxer_name = 'Bad boxer'
     with pytest.raises(ValueError, match=f"Boxer '{boxer_name}' not found."):
-        get_boxer_by_name("Boxer Name")
+        get_boxer_by_name("Bad boxer")
 
 ######################################################
 #
@@ -344,7 +348,7 @@ def test_get_weight_class_by_bad_weight(mock_cursor):
 
     """
     mock_cursor.fetchone.return_value = None
-
+    weight = 120
     with pytest.raises(ValueError, match=f"Invalid weight: {weight}. Weight must be at least 125."):
         get_weight_class_by_weight(mock_cursor.weight)
 
@@ -380,7 +384,7 @@ def test_update_boxer_stats(mock_cursor):
 
 def test_update_boxer_stats_bad_result(mock_cursor):
     mock_cursor.fetchone.return_value = None
-
+    result = 'tie'
     with pytest.raises(ValueError, match=f"Invalid result: {result}. Expected 'win' or 'loss'."):
         get_weight_class_by_weight(mock_cursor.weight)
 
@@ -388,6 +392,6 @@ def test_update_boxer_stats_bad_result(mock_cursor):
 
 def test_update_boxer_stats_bad_id(mock_cursor):
     mock_cursor.fetchone.return_value = None
-
+    boxer_id = 999
     with pytest.raises(ValueError, match=f"Boxer with ID {boxer_id} not found."):
         get_weight_class_by_weight(mock_cursor.weight)
