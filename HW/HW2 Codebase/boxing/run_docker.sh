@@ -17,7 +17,7 @@ else
 fi
 
 # Check if the database directory exists; if not, create it
-if [ ! -d "${DB_VOLUME_PATH}" ]; then
+if [ ! -d "${DB_VOLUME_PATH}/db" ]; then
   echo "Creating database directory at ${DB_VOLUME_PATH}..."
   mkdir db
   docker volume create boxing_volume
@@ -42,8 +42,7 @@ fi
 
 # Run the Docker container with the necessary ports and volume mappings
 echo "Running Docker container..."
-docker run -d \ 
-  --env-file .env \
+docker run -d --env-file .env \
   -v boxing_volume:/app/db \
   --name ${IMAGE_NAME}_container $IMAGE_NAME:$CONTAINER_TAG
 echo "Docker container is running on port ${HOST_PORT}."

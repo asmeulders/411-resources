@@ -271,6 +271,8 @@ enter_ring "Mike Tyson" 220 178 180 22
 clear_ring
 
 #start fight
+enter_ring "Muhammad Ali" 236 191 198 38
+enter_ring "Mike Tyson" 220 178 180 22
 fight
 
 #leaderboard
