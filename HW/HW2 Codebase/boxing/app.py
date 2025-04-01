@@ -131,9 +131,9 @@ def add_boxer() -> Response:
         reach = data["reach"]
         age = data["age"]
 
-        app.logger.info(f"Data types: {type(name)}, {type(weight)}, {type(height)}, {type(reach)}, {type(age)}")
-        for attribute in [name, weight, height, reach, age]:
-            app.logger.info(type(attribute))
+        # app.logger.info(f"Data types: {type(name)}, {type(weight)}, {type(height)}, {type(reach)}, {type(age)}")
+        # for attribute in [name, weight, height, reach, age]:
+        #     app.logger.info(type(attribute))
 
         if (
             not isinstance(name, str)

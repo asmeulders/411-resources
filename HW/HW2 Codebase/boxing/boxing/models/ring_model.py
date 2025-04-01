@@ -79,7 +79,7 @@ class RingModel: # DOCSTRINGS
             logger.warning("Clearing an empty ring") 
         
         self.ring.clear()
-        logger.info("Successfully cleared the playlist")
+        logger.info("Successfully cleared the ring")
 
     def enter_ring(self, boxer: Boxer): # DOCSTRINGS AND LOGGING
         """Adds a boxer to the ring.
