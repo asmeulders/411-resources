@@ -462,7 +462,7 @@ swap_songs_in_playlist() {
 ######################################################
 
 # Function to get the song leaderboard sorted by play count
-get_song_leaderboard() {
+get_boxer_leaderboard() {
   echo "Getting song leaderboard sorted by play count..."
   response=$(curl -s -X GET "$BASE_URL/song-leaderboard?sort=play_count")
   if echo "$response" | grep -q '"status": "success"'; then
