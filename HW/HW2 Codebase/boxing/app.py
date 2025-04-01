@@ -301,7 +301,7 @@ def get_boxer_by_name(boxer_name: str) -> Response:
 ############################################################
 
 
-@app.route('/api/fight', methods=['GET'])
+@app.route('/api/fight', methods=['POST'])
 def bout() -> Response:
     """Route that triggers the fight between the two current boxers.
 

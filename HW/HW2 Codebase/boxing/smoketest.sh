@@ -120,7 +120,7 @@ get_boxer_by_name() {
   name=$1
 
   echo "Getting boxer by name (Name: '$name')..."
-  response=$(curl -s -X GET "$BASE_URL/get-boxer-by-name/\"$name\"") # get-song-from-catalog-by-compound-key
+  response=$(curl -s -X GET "$BASE_URL/get-boxer-by-name/$(echo $name | sed 's/ /%20/g')") 
   if echo "$response" | grep -q '"status": "success"'; then
     echo "Boxer retrieved successfully by name."
     if [ "$ECHO_JSON" = true ]; then
@@ -149,7 +149,7 @@ enter_ring() {
   echo "Adding boxer to ring: $name..."
   response=$(curl -s -X POST "$BASE_URL/enter-ring" \
     -H "Content-Type: application/json" \
-    -d "{\"name\":\"$name\", \"weight\":\"$weight\", \"height\":$height\", \"reach\":\"$reach\". \"age\":$age}")
+    -d "{\"name\":\"$name\", \"weight\":$weight, \"height\":$height, \"reach\":$reach, \"age\":$age}")
 
   if echo "$response" | grep -q '"status": "success"'; then
     echo "Boxer added to ring successfully."
@@ -200,21 +200,6 @@ fight() {
 #
 ######################################################
 
-# Function to get the boxer leaderboard sorted by wins or win_pct
-# get_boxer_leaderboard() { 
-#   echo "Getting boxer leaderboard sorted by wins or win percentage..."
-#   response=$(curl -s -X GET "$BASE_URL/leaderboard?sort=wins")
-#   if echo "$response" | grep -q '"status": "success"'; then
-#     echo "Boxer leaderboard retrieved successfully."
-#     if [ "$ECHO_JSON" = true ]; then
-#       echo "Leaderboard JSON (sorted by wins or win percentage):"
-#       echo "$response" | jq .
-#     fi
-#   else
-#     echo "Failed to get boxer leaderboard."
-#     exit 1
-#   fi
-# }
 # Function to get the boxer leaderboard sorted by wins or win_pct
 get_boxer_leaderboard() {
   echo "Getting boxer leaderboard sorted by wins or win percentage..."
