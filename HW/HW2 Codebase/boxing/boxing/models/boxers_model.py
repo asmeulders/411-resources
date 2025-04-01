@@ -35,7 +35,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         name (str): The name of the boxer. 
         weight (int): The weight of the boxer. 
         height (int): The height of the boxer. 
-        reach (float): The length of their arms/span. 
+        reach (float): The length of their arms/span. Can also be int
         age (int): The age of the boxer. 
 
     Raises:
