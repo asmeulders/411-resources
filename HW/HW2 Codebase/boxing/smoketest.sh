@@ -66,7 +66,7 @@ create_boxer() {
   age=$5
 
   echo "Creating boxer ($name - $age)..."
-  curl -s -X POST "$BASE_URL/create-boxer" -H "Content-Type: application/json" \
+  curl -s -X POST "$BASE_URL/add-boxer" -H "Content-Type: application/json" \
     -d "{\"name\":\"$name\", \"weight\":\"$weight\", \"height\":$height, \"reach\":\"$reach\", \"age\":$age}" | grep -q '"status": "success"'
 
   if [ $? -eq 0 ]; then
@@ -157,7 +157,7 @@ get_boxer_by_name() {
 
 ############################################################
 #
-# Playlist Management
+# Ring Management
 #
 ############################################################
 
@@ -168,67 +168,67 @@ enter_ring() {
   reach=$4
   age=$5
 
-  echo "Adding song to playlist: $artist - $title ($year)..."
-  response=$(curl -s -X POST "$BASE_URL/add-song-to-playlist" \
+  echo "Adding boxer to ring: $name..."
+  response=$(curl -s -X POST "$BASE_URL/enter-ring" \
     -H "Content-Type: application/json" \
-    -d "{\"artist\":\"$artist\", \"title\":\"$title\", \"year\":$year}")
+    -d "{\"name\":\"$name\", \"weight\":\"$weight\", \"height\":$height\", \"reach\":\"$reach\". \"age\":$age}")
 
   if echo "$response" | grep -q '"status": "success"'; then
-    echo "Song added to playlist successfully."
+    echo "Boxer added to ring successfully."
     if [ "$ECHO_JSON" = true ]; then
-      echo "Song JSON:"
+      echo "Boxer JSON:"
       echo "$response" | jq .
     fi
   else
-    echo "Failed to add song to playlist."
+    echo "Failed to add boxer to the ring."
     exit 1
   fi
 }
 
-remove_song_from_playlist() {
-  artist=$1
-  title=$2
-  year=$3
+# remove_song_from_playlist() {
+#   artist=$1
+#   title=$2
+#   year=$3
 
-  echo "Removing song from playlist: $artist - $title ($year)..."
-  response=$(curl -s -X DELETE "$BASE_URL/remove-song-from-playlist" \
-    -H "Content-Type: application/json" \
-    -d "{\"artist\":\"$artist\", \"title\":\"$title\", \"year\":$year}")
+#   echo "Removing song from playlist: $artist - $title ($year)..."
+#   response=$(curl -s -X DELETE "$BASE_URL/remove-song-from-playlist" \
+#     -H "Content-Type: application/json" \
+#     -d "{\"artist\":\"$artist\", \"title\":\"$title\", \"year\":$year}")
+
+#   if echo "$response" | grep -q '"status": "success"'; then
+#     echo "Song removed from playlist successfully."
+#     if [ "$ECHO_JSON" = true ]; then
+#       echo "Song JSON:"
+#       echo "$response" | jq .
+#     fi
+#   else
+#     echo "Failed to remove song from playlist."
+#     exit 1
+#   fi
+# }
+
+# remove_song_by_track_number() {
+#   track_number=$1
+
+#   echo "Removing song by track number: $track_number..."
+#   response=$(curl -s -X DELETE "$BASE_URL/remove-song-from-playlist-by-track-number/$track_number")
+
+#   if echo "$response" | grep -q '"status":'; then
+#     echo "Song removed from playlist by track number ($track_number) successfully."
+#   else
+#     echo "Failed to remove song from playlist by track number."
+#     exit 1
+#   fi
+# }
+
+clear_ring() {
+  echo "Clearing boxers from the ring..."
+  response=$(curl -s -X POST "$BASE_URL/clear-boxers")
 
   if echo "$response" | grep -q '"status": "success"'; then
-    echo "Song removed from playlist successfully."
-    if [ "$ECHO_JSON" = true ]; then
-      echo "Song JSON:"
-      echo "$response" | jq .
-    fi
+    echo "Boxers cleared successfully."
   else
-    echo "Failed to remove song from playlist."
-    exit 1
-  fi
-}
-
-remove_song_by_track_number() {
-  track_number=$1
-
-  echo "Removing song by track number: $track_number..."
-  response=$(curl -s -X DELETE "$BASE_URL/remove-song-from-playlist-by-track-number/$track_number")
-
-  if echo "$response" | grep -q '"status":'; then
-    echo "Song removed from playlist by track number ($track_number) successfully."
-  else
-    echo "Failed to remove song from playlist by track number."
-    exit 1
-  fi
-}
-
-clear_playlist() {
-  echo "Clearing playlist..."
-  response=$(curl -s -X POST "$BASE_URL/clear-playlist")
-
-  if echo "$response" | grep -q '"status": "success"'; then
-    echo "Playlist cleared successfully."
-  else
-    echo "Failed to clear playlist."
+    echo "Failed to clear boxers from the ring."
     exit 1
   fi
 }
@@ -236,18 +236,18 @@ clear_playlist() {
 
 ############################################################
 #
-# Play Playlist
+# Start fight
 #
 ############################################################
 
-play_current_song() {
-  echo "Playing current song..."
-  response=$(curl -s -X POST "$BASE_URL/play-current-song")
+fight() {
+  echo "Starting the fight..."
+  response=$(curl -s -X POST "$BASE_URL/fight")
 
   if echo "$response" | grep -q '"status": "success"'; then
-    echo "Current song is now playing."
+    echo "The fight has begun."
   else
-    echo "Failed to play current song."
+    echo "Failed to start the fight."
     exit 1
   fi
 }
@@ -506,13 +506,11 @@ get_boxer_by_id 2
 get_boxer_by_name "Muhammad Ali"
 # get_random_song
 
-add_song_to_playlist "The Rolling Stones" "Paint It Black" 1966
-add_song_to_playlist "Queen" "Bohemian Rhapsody" 1975
-add_song_to_playlist "Led Zeppelin" "Stairway to Heaven" 1971
-add_song_to_playlist "The Beatles" "Let It Be" 1970
+enter_ring "Muhammad Ali" 236 191 198 38
+enter_ring "Mike Tyson" 220 178 180 22
 
-remove_song_from_playlist "The Beatles" "Let It Be" 1970
-remove_song_by_track_number 2
+# remove_song_from_playlist "The Beatles" "Let It Be" 1970
+# remove_song_by_track_number 2
 
 get_all_songs_from_playlist
 get_random_song_from_playlist
@@ -530,7 +528,7 @@ get_song_from_playlist_by_track_number 1
 
 get_playlist_length_duration
 
-play_current_song
+fight
 rewind_playlist
 
 play_entire_playlist
