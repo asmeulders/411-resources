@@ -89,6 +89,14 @@ def test_get_boxers(ring_model, sample_ring):
     assert all_boxers[1].name == 'Mike Tyson'
 
 
+def test_get_empty_boxers(ring_model, sample_ring):
+    """Test retrieving all boxers from an empty ring.
+
+    """
+    with pytest.raises(ValueError, match="Ring is empty"):
+        all_boxers = ring_model.get_boxers()
+
+
 def test_get_fighting_skill(ring_model, sample_boxer1):
     """Test successfully retrieving a boxer's fighting skill.
     

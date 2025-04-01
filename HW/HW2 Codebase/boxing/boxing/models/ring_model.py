@@ -13,7 +13,7 @@ configure_logger(logger)
 
 class RingModel: # DOCSTRINGS
     """
-    A class to manage the ring during a bout.
+    A class to manage the ring during a fight.
 
     Attributes:
         ring (List[Boxer]): The list of boxers in the ring.
@@ -62,7 +62,7 @@ class RingModel: # DOCSTRINGS
         update_boxer_stats(winner.id, 'win')
         update_boxer_stats(loser.id, 'loss')
 
-        logger.info("The bout is over, clearing the ring.")
+        logger.info("The fight is over, clearing the ring.")
         self.clear_ring()
 
         return winner.name
@@ -75,17 +75,9 @@ class RingModel: # DOCSTRINGS
         """
         logger.info("Received request to clear the ring")
         
-        # try:
-        #     if self.check_if_empty():
-        #         pass
-        # except ValueError:
-        #     logger.warning("Clearing an empty playlist")
-
-        # self.ring.clear()
-        # logger.info("Successfully cleared the playlist")
+        if not self.ring:
+            logger.warning("Clearing an empty ring") 
         
-        if not self.ring: # might need some functionality here. do the warning for empty
-            return 
         self.ring.clear()
         logger.info("Successfully cleared the playlist")
 

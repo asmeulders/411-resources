@@ -21,7 +21,7 @@ def check_database_connection(): # DO DOCSTRINGS AND LOGGING
     Raises:
         Exception: If the database connection is not OK.
 
-    """ # added
+    """
     try:
         logger.info(f"Checking database connection to {DB_PATH}...") # added
 
@@ -49,7 +49,7 @@ def check_table_exists(tablename: str): # DOCSTRINGS AND LOGGING
     Raises:
         Exception: If the table does not exist.
 
-    """ # added
+    """
     try:
         logger.info(f"Checking if table '{tablename}' exists in {DB_PATH}...") # added
 
