@@ -54,7 +54,7 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
     if not isinstance(height, int) or height <= 0:
         logger.warning(f"Invalid height provided: {height}")
         raise ValueError(f"Invalid height: {height}. Must be greater than 0.")
-    if not isinstance(reach, float) or reach <= 0:
+    if not isinstance(reach, (int, float)) or reach <= 0:
         logger.warning(f"Invalid reach provided: {reach}")
         raise ValueError(f"Invalid reach: {reach}. Must be greater than 0.")
     if not isinstance(age, int) or not (18 <= age <= 40):

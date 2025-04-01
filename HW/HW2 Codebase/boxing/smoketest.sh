@@ -59,9 +59,9 @@ create_boxer() {
   reach=$4
   age=$5
 
-  echo "Creating boxer ($name - $age)..."
+  echo "Creating boxer, $name - ($weight, $height, $reach, $age)..."
   curl -s -X POST "$BASE_URL/add-boxer" -H "Content-Type: application/json" \
-    -d "{\"name\":\"$name\", \"weight\":\"$weight\", \"height\":$height, \"reach\":\"$reach\", \"age\":$age}" | grep -q '"status": "success"'
+    -d "{\"name\":\"$name\", \"weight\":$weight, \"height\":$height, \"reach\":$reach, \"age\":$age}" | grep -q '"status": "success"'
 
   if [ $? -eq 0 ]; then
     echo "Boxer created successfully."
