@@ -120,7 +120,7 @@ get_boxer_by_name() {
   name=$1
 
   echo "Getting boxer by name (Name: '$name')..."
-  response=$(curl -s -X GET "$BASE_URL/get-boxer-by-name?name=$(echo $name | sed 's/ /%20/g')") # get-song-from-catalog-by-compound-key
+  response=$(curl -s -X GET "$BASE_URL/get-boxer-by-name/\"$name\"") # get-song-from-catalog-by-compound-key
   if echo "$response" | grep -q '"status": "success"'; then
     echo "Boxer retrieved successfully by name."
     if [ "$ECHO_JSON" = true ]; then
@@ -128,7 +128,7 @@ get_boxer_by_name() {
       echo "$response" | jq .
     fi
   else
-    echo "Failed to get boxer by boxer."
+    echo "Failed to get boxer by name."
     exit 1
   fi
 }
@@ -261,13 +261,13 @@ create_boxer "Rocky Balboa" 200 180 188 28
 delete_boxer_by_id 3
 
 #Retrieve boxers
-get_boxers
 get_boxer_by_id 2
 get_boxer_by_name "Muhammad Ali"
 
 #ring management
 enter_ring "Muhammad Ali" 236 191 198 38
 enter_ring "Mike Tyson" 220 178 180 22
+get_boxers
 clear_ring
 
 #start fight

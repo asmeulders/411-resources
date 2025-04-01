@@ -193,7 +193,7 @@ def delete_boxer(boxer_id: int) -> Response:
                 "message": f"Boxer with ID {boxer_id} not found"
             }), 400)
 
-        boxers_model.delete_boxer(boxer_id)
+        boxers_model.delete_boxer_by_id(boxer_id)
         app.logger.info(f"Successfully deleted boxer with ID {boxer_id}")
 
         return make_response(jsonify({
