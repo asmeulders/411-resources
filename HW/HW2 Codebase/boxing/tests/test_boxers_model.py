@@ -293,7 +293,7 @@ def test_get_boxer_by_name(mock_cursor):
     assert actual_query == expected_query, "The SQL query did not match the expected structure."
 
     actual_arguments = mock_cursor.execute.call_args[0][1]
-    expected_arguments = ("Boxer Name")
+    expected_arguments = ("Boxer Name",)
     assert actual_arguments == expected_arguments, f"The SQL query arguments did not match. Expected {expected_arguments}, got {actual_arguments}."
 
 
