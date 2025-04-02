@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 import pytest
+from pytest_mock import MockerFixture
 
 from playlist.models.playlist_model import PlaylistModel
 from playlist.models.song_model import Song

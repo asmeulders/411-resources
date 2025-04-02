@@ -31,4 +31,8 @@ VOLUME ["/app/db"]
 EXPOSE 5000
 
 # Run the entrypoint script when the container launches
-CMD ["/app/entrypoint.sh"]
+# Changed these two lines - https://stackoverflow.com/questions/44687685/getting-permission-denied-in-docker-run
+RUN chmod +x entrypoint.sh
+ENTRYPOINT [ "/app/entrypoint.sh" ] 
+
+# CMD ["/app/entrypoint.sh"]

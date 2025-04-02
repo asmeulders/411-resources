@@ -131,6 +131,10 @@ def add_boxer() -> Response:
         reach = data["reach"]
         age = data["age"]
 
+        # app.logger.info(f"Data types: {type(name)}, {type(weight)}, {type(height)}, {type(reach)}, {type(age)}")
+        # for attribute in [name, weight, height, reach, age]:
+        #     app.logger.info(type(attribute))
+
         if (
             not isinstance(name, str)
             or not isinstance(weight, (int, float))
@@ -189,7 +193,7 @@ def delete_boxer(boxer_id: int) -> Response:
                 "message": f"Boxer with ID {boxer_id} not found"
             }), 400)
 
-        boxers_model.delete_boxer(boxer_id)
+        boxers_model.delete_boxer_by_id(boxer_id)
         app.logger.info(f"Successfully deleted boxer with ID {boxer_id}")
 
         return make_response(jsonify({
@@ -297,7 +301,7 @@ def get_boxer_by_name(boxer_name: str) -> Response:
 ############################################################
 
 
-@app.route('/api/fight', methods=['GET'])
+@app.route('/api/fight', methods=['POST'])
 def bout() -> Response:
     """Route that triggers the fight between the two current boxers.
 
